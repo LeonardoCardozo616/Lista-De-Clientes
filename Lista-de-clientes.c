@@ -18,6 +18,8 @@ void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);
 void inserirClienteFinalE(Tcliente **final, int *C, int *M);
 void inserirClienteE(Tcliente **cabeca, int *C, int *M);
 void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
+void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
+void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
 void inserirNovoClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Insere um novo cliente em uma lista sequencial.
 void retirarCliente(Tcliente **cabeca, int n, int *C, int *M);//Retira um cliente de uma lista encadeada.
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Retira um cliente de uma lista sequencial.
@@ -183,7 +185,6 @@ int main()
                 case 1: t = clock();
                         tam++;
                         usuario = (Tcliente*) realloc(usuario, sizeof(Tcliente)*tam);
-                        //inserirNovoClienteSequencial(&usuario, 1, tam, &C, &M);
                         inserirClienteInicioS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -193,7 +194,7 @@ int main()
                 case 2: t = clock();
                         tam++;
                         usuario = (Tcliente*) realloc(usuario, sizeof(Tcliente)*tam);
-                        inserirNovoClienteSequencial(&usuario, 2, tam, &C, &M);
+                        inserirClienteFinalS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -202,7 +203,7 @@ int main()
                 case 3: t = clock();
                         tam++;
                         usuario = (Tcliente*) realloc(usuario, sizeof(Tcliente)*tam);
-                        inserirNovoClienteSequencial(&usuario, 3, tam, &C, &M);
+                        inserirClienteS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -403,63 +404,6 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M)
     }
 }
 
-void inserirNovoClienteSequencial(Tcliente **usuario, int n, int tam, int* C, int *M)
-{
-    Tcliente pessoa;
-    char nome[30];
-    int RG;
-
-    printf("Digite o nome do Cliente: \n");
-    scanf("%s", nome);
-    printf("Digite seu RG: \n");
-    scanf("%d", &RG);
-
-    if(n == 1){
-        *C = 1;
-        *M = 0;
-        for(int i = tam-1; i > 0; i--){
-            strcpy((*usuario)[i].nome, (*usuario)[i-1].nome);
-            (*usuario)[i].RG = (*usuario)[i-1].RG;
-            *M = *M + 1;
-            *C = *C + 1;
-        }
-        strcpy((*usuario)[0].nome, nome);
-        (*usuario)[0].RG = RG;
-    }
-
-    else if(n == 2){
-        *C = 2;
-        strcpy((*usuario)[tam-1].nome, nome);
-        (*usuario)[tam-1].RG = RG;
-    }
-
-    else{
-        int ps;
-        *C = 3;
-        *M = 0;
-
-        do{
-            printf("Escolha a posicao que deseja incluir:\n");
-            scanf("%d", &ps);//Baseado no Binario
-            *C = *C + 1;
-        }while(ps < 0 && ps > tam-1);
-
-        for(int i = tam-1; i > 0; i--){
-            *C = *C + 2;
-            if(i == ps)
-                break;
-
-            strcpy((*usuario)[i].nome, (*usuario)[i-1].nome);
-            (*usuario)[i].RG = (*usuario)[i-1].RG;
-            *M = *M + 1;
-        }
-        *C = *C + 1;
-
-        strcpy((*usuario)[ps].nome, nome);
-        (*usuario)[ps].RG = RG;
-    }
-}
-
 void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M)
 {
     Tcliente *pessoa = criaçãoDeNo();
@@ -472,6 +416,40 @@ void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M)
     }
     strcpy((*usuario)[0].nome, pessoa->nome);
     (*usuario)[0].RG = pessoa->RG;
+}
+
+void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M)
+{
+    Tcliente *pessoa = criaçãoDeNo();
+    
+    strcpy((*usuario)[tam-1].nome, pessoa->nome);
+    (*usuario)[tam-1].RG = pessoa->RG;
+}
+
+void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M)
+{
+    int pos;
+    Tcliente *pessoa = criaçãoDeNo();
+
+    do{
+        printf("Escolha a posicao que deseja incluir:\n");
+        scanf("%d", &pos);//Baseado no Binario
+        *C = *C + 1;
+    }while(pos < 0 && pos > tam-1);
+    
+    for(int i = tam-1; i > 0; i--){
+        *C = *C + 2;
+        if(i == pos)
+            break;
+
+        strcpy((*usuario)[i].nome, (*usuario)[i-1].nome);
+        (*usuario)[i].RG = (*usuario)[i-1].RG;
+        *M = *M + 1;
+    }
+    *C = *C + 1;
+
+    strcpy((*usuario)[pos].nome, pessoa->nome);
+    (*usuario)[pos].RG = pessoa->RG;
 }
 
 void retirarCliente(Tcliente** cabeca, int n, int *C, int *M)
