@@ -20,7 +20,6 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M);
 void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
-void inserirNovoClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Insere um novo cliente em uma lista sequencial.
 void retirarCliente(Tcliente **cabeca, int n, int *C, int *M);//Retira um cliente de uma lista encadeada.
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Retira um cliente de uma lista sequencial.
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
