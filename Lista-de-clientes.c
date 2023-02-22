@@ -26,9 +26,9 @@ void removerClienteE(Tcliente** cabeca, int *C, int *M);//Remove um cliente de q
 void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M);//Remove o primeiro cliente da lista Sequencial
 void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);//Remove o último cliente da lista Sequencial
 void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);//Remove um cliente de qualquer posição da lista Sequencial
+void buscarClienteE(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
+void buscarClienteS(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M);;// Encontra um cliente em especifico através do RG em uma lista sequencial
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
-void imprimeEspecifico(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
-void buscarCliente(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M);;// Encontra um cliente em especifico através do RG em uma lista sequencial
 void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M);// Ordena uma lista usando diferentes métodos
 void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
 void ordenarListaMergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);// Ordena com MergeSort
@@ -107,7 +107,6 @@ int main()
                         break;
 
                 case 4: t = clock();//Retirar Cliente do Inicio da Lista
-                        //retirarCliente(&inicio, 4, &C, &M);
                         removerClienteInicioE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -115,7 +114,6 @@ int main()
                         break;
 
                 case 5: t = clock();//Retirar Cliente do Final da Lista
-                        //retirarCliente(&careca, 5, &C, &M);
                         removerClienteFinalE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -123,7 +121,6 @@ int main()
                         break;
 
                 case 6: t = clock();//Retirar Cliente de Outras Partes da Lista
-                        //retirarCliente(&inicio, 6, &C, &M);
                         removerClienteE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -131,7 +128,7 @@ int main()
                         break;
 
                 case 7: t = clock();//encontrar um cliente Em Especifico pelo RG
-                        imprimeEspecifico(inicio, &C, &M);
+                        buscarClienteE(inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -218,7 +215,6 @@ int main()
 
                 case 4: t = clock();
                         tam--;
-                        //retirarClienteSequencial(&usuario, 4, tam, &C, &M);
                         removerClienteInicioS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -227,7 +223,6 @@ int main()
 
                 case 5: t = clock();
                         tam--;
-                        //retirarClienteSequencial(&usuario, 5, tam, &C, &M);
                         removerClienteFinalS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -236,7 +231,6 @@ int main()
 
                 case 6: t = clock();
                         tam--;
-                        //retirarClienteSequencial(&usuario, 6, tam, &C, &M);
                         removerClienteS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
@@ -251,8 +245,8 @@ int main()
                         t = clock();
                         switch(op7)
                         {
-                            case 1: buscarCliente(usuario, op7, 0, tam, RGS, &C, &M); break;
-                            case 2: buscarCliente(usuario, op7, 0, tam-1, RGS ,&C, &M); break;
+                            case 1: buscarClienteS(usuario, op7, 0, tam, RGS, &C, &M); break;
+                            case 2: buscarClienteS(usuario, op7, 0, tam-1, RGS ,&C, &M); break;
                             default: printf("\n\n Opcao nao valida\n");
                         }
                         t = clock() - t;
@@ -554,17 +548,7 @@ void removerClienteS(Tcliente** usuario, int tam, int *C, int *M)
         (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
 }
 
-void listarEncadeado (Tcliente *cabeca)
-{
-    int i = 0;
-    while (cabeca != NULL){
-        printf("\nCliente: %s, RG: %d, Posicao: %d\n", cabeca->nome, cabeca->RG, i);
-        cabeca = cabeca->proximo; //faz cabe�a apontar para o proximo n�
-        i++;
-    }
-}
-
-void imprimeEspecifico(Tcliente *cabeca, int *C, int *M)
+void buscarClienteE(Tcliente *cabeca, int *C, int *M)
 {
     int RG, Encontrou = 0;
     int i = 0;
@@ -591,7 +575,7 @@ void imprimeEspecifico(Tcliente *cabeca, int *C, int *M)
         printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
 }
 
-void buscarCliente(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M)
+void buscarClienteS(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M)
 {
     int Encontrou = 0;
 
@@ -641,6 +625,17 @@ void buscarCliente(Tcliente *usuario, int op, int inic, int tam, int RG, int *C,
             printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
     }
 }
+
+void listarEncadeado (Tcliente *cabeca)
+{
+    int i = 0;
+    while (cabeca != NULL){
+        printf("\nCliente: %s, RG: %d, Posicao: %d\n", cabeca->nome, cabeca->RG, i);
+        cabeca = cabeca->proximo; //faz cabe�a apontar para o proximo n�
+        i++;
+    }
+}
+
 
 void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M)
 {
