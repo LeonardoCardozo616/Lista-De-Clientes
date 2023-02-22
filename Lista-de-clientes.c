@@ -15,7 +15,8 @@ void listaEncadeada(Tcliente **cabeca, Tcliente **inicio ,FILE* fp);//Criação 
 Tcliente* listaSequencial(FILE* fp, int linhas, int* tam);//Criação de uma lista Sequencial
 Tcliente* criaçãoDeNo();//Criação de um nó
 int getRG();//Recebe um valor de RG
-int getPos(int caso);//Recebe um valor de posição
+int getPos(int caso, int tam);//Recebe um valor de posição
+int getListaTam(Tcliente *cabeca);//Recebe o tamanho da lista encadeada
 void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente no início da lista Encadeada
 void inserirClienteFinalE(Tcliente **final, int *C, int *M);//Insere um novo cliente no fim da lista Encadeada
 void inserirClienteE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente em qualquer posição da lista Encadeada
@@ -372,21 +373,31 @@ int getRG()
     return RG;
 }
 
-int getPos(int caso)
+int getPos(int caso, int tam)
 {
     int pos;
+
     do{
         if(caso == 0){
-            printf("Escolha a posicao que deseja incluir:\n");
+            printf("Escolha a posicao que deseja incluir: (0 a %d)\n", tam);
             scanf("%d", &pos);
         }
         else{
-            printf("Escolha a posicao que deseja excluir:\n");
+            printf("Escolha a posicao que deseja excluir: (0 a %d)\n", tam);
             scanf("%d", &pos);
         }
-    }while(pos < 0);
+    }while(pos < 0 || pos > tam);
 
     return pos;
+}
+
+int getListaTam(Tcliente *cabeca){
+    int tam = 0;
+    while (cabeca != NULL){
+        cabeca = cabeca->proximo; //faz cabe�a apontar para o proximo n�
+        tam++;
+    }
+    return tam;
 }
 
 void inserirClienteInicioE(Tcliente **inicio, int *C, int *M)
@@ -412,7 +423,7 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M)
     Tcliente *novoNo;
     Tcliente *posA = *cabeca,
     *posB = (*cabeca)->proximo;
-    int pos = getPos(0);
+    int pos = getPos(0, getListaTam(*cabeca));
     (*C)++;
 
     if(pos == 0)
@@ -455,7 +466,7 @@ void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M)
 
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M)
 {
-    int pos = getPos(0);
+    int pos = getPos(0, tam-1);
     Tcliente *pessoa = criaçãoDeNo();
     
     for(int i = tam-1; i > 0; i--){
@@ -502,7 +513,7 @@ void removerClienteFinalE(Tcliente** cabeca, int *C, int *M)
 
 void removerClienteE(Tcliente** cabeca, int *C, int *M)
 {
-    int pos = getPos(-1);
+    int pos = getPos(-1, getListaTam(*cabeca)-1);
     Tcliente *posA = *cabeca;
     Tcliente *posB = (*cabeca)->proximo;
     *C = 3;
@@ -539,7 +550,7 @@ void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M)
 
 void removerClienteS(Tcliente** usuario, int tam, int *C, int *M)
 {
-    int pos = getPos(-1);
+    int pos = getPos(-1, tam);
 
     for(int i = 0; i < tam; i++){
         if(i >= pos){
