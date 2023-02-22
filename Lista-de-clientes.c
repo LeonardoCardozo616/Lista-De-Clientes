@@ -11,21 +11,21 @@ typedef struct tipo_cliente
     struct tipo_cliente *proximo;
 }Tcliente;
 
-void listaEncadeada(Tcliente **cabeca, Tcliente **inicio ,FILE* fp);
-Tcliente* listaSequencial(FILE* fp, int linhas, int* tam);
-Tcliente* criaçãoDeNo();
-void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);
-void inserirClienteFinalE(Tcliente **final, int *C, int *M);
-void inserirClienteE(Tcliente **cabeca, int *C, int *M);
-void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
-void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
-void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
-void removerClienteInicioE(Tcliente** inicio, int *C, int *M);
-void removerClienteFinalE(Tcliente** cabeca, int *C, int *M);
-void removerClienteE(Tcliente** cabeca, int *C, int *M);
-void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M);
-void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);
-void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);
+void listaEncadeada(Tcliente **cabeca, Tcliente **inicio ,FILE* fp);//Criação de uma lista Encadeada
+Tcliente* listaSequencial(FILE* fp, int linhas, int* tam);//Criação de uma lista Sequencial
+Tcliente* criaçãoDeNo();//Criação de um nó de Tcliente
+void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente no início da lista Encadeada
+void inserirClienteFinalE(Tcliente **final, int *C, int *M);//Insere um novo cliente no fim da lista Encadeada
+void inserirClienteE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente em qualquer posição da lista Encadeada
+void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);//Insere um novo cliente no início da lista Sequencial
+void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);//Insere um novo cliente no fim da lista Sequencial
+void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);//Insere um novo cliente em qualquer posição da lista Sequencial
+void removerClienteInicioE(Tcliente** inicio, int *C, int *M);//Remove o primeiro cliente da lista Encadeada
+void removerClienteFinalE(Tcliente** cabeca, int *C, int *M);//Remove o último cliente da lista Encadeada
+void removerClienteE(Tcliente** cabeca, int *C, int *M);//Remove um cliente de qualquer posição da lista Encadeada
+void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M);//Remove o primeiro cliente da lista Sequencial
+void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);//Remove o último cliente da lista Sequencial
+void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);//Remove um cliente de qualquer posição da lista Sequencial
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
 void imprimeEspecifico(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
 void buscarCliente(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M);;// Encontra um cliente em especifico através do RG em uma lista sequencial
