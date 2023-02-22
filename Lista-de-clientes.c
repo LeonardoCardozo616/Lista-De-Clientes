@@ -20,9 +20,9 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M);
 void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
-void retirarCliente(Tcliente **cabeca, int n, int *C, int *M);//Retira um cliente de uma lista encadeada.
 void removerClienteInicialE(Tcliente** inicio, int *C, int *M);
 void removerClienteFinalE(Tcliente** cabeca, int *C, int *M);
+void removerClienteE(Tcliente** cabeca, int *C, int *M);
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Retira um cliente de uma lista sequencial.
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
 void imprimeEspecifico(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
@@ -121,7 +121,8 @@ int main()
                         break;
 
                 case 6: t = clock();//Retirar Cliente de Outras Partes da Lista
-                        retirarCliente(&inicio, 6, &C, &M);
+                        //retirarCliente(&inicio, 6, &C, &M);
+                        removerClienteE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -456,65 +457,6 @@ void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M)
     (*usuario)[pos].RG = pessoa->RG;
 }
 
-void retirarCliente(Tcliente** cabeca, int n, int *C, int *M)
-{
-
-    if(n == 4)
-    {
-        *C = 1;
-        Tcliente *tpm = (*cabeca)->proximo;
-        (*cabeca) = tpm;
-        *M = 2;
-
-    }
-    else if(n == 5)
-    {
-        Tcliente *ultimoNo, *penultimo;
-        *C = 2;
-        ultimoNo = *cabeca;
-        *M = 1;
-        while (ultimoNo->proximo != NULL)
-        {
-            *C = *C + 1;
-            penultimo = ultimoNo;
-            ultimoNo = ultimoNo->proximo;
-            *M = *M + 2;
-        }
-        *C = *C + 1;
-
-        free(ultimoNo);
-        penultimo->proximo = NULL;
-        *M = *M + 1;
-    }
-    else
-    {
-        int ps;
-        Tcliente *posicao1 = *cabeca;
-        Tcliente *posicao2 = (*cabeca)->proximo;
-        *C = 3;
-        *M = 2;
-
-        do{
-            printf("Escolha a posicao que deseja excluir:\n");
-            scanf("%d", &ps);//Baseado no Binario
-            *C = *C + 1;
-        }while(ps < 1);
-
-        //posicao2 = posicao2->proximo;
-        for(int i = 0; i < ps; i++){
-            *C = *C + 1;
-            if(ps == (i+1)){
-                posicao1->proximo = posicao2->proximo;
-                *M = *M + 1;
-                continue;
-            }
-            *M = *M + 2;
-            posicao1 = posicao1->proximo;
-            posicao2 = posicao2->proximo;
-        }
-    }
-}
-
 void removerClienteInicialE(Tcliente** inicio, int *C, int *M)
 {
     Tcliente *tpm = (*inicio)->proximo;
@@ -545,8 +487,8 @@ void removerClienteFinalE(Tcliente** cabeca, int *C, int *M)
 void removerClienteE(Tcliente** cabeca, int *C, int *M)
 {
     int pos;
-    Tcliente *posicao1 = *cabeca;
-    Tcliente *posicao2 = (*cabeca)->proximo;
+    Tcliente *posA = *cabeca;
+    Tcliente *posB = (*cabeca)->proximo;
     *C = 3;
     *M = 2;
 
@@ -559,17 +501,13 @@ void removerClienteE(Tcliente** cabeca, int *C, int *M)
     if(pos == 0)
         removerClienteInicialE(cabeca, C, M);
     else{
-        for(int i = 0; i < pos; i++){
+        for(int i = 1; i < pos; i++){
             *C = *C + 1;
-            if(pos == (i+1)){
-                posicao1->proximo = posicao2->proximo;
-                *M = *M + 1;
-                continue;
-            }
-            *M = *M + 2;
-            posicao1 = posicao1->proximo;
-            posicao2 = posicao2->proximo;
+            posA = posA->proximo;
+            posB = posB->proximo;
         }
+        posA->proximo = posB->proximo;
+        free(posB);
     }
 }
 
