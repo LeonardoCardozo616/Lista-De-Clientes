@@ -20,10 +20,12 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M);
 void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
-void removerClienteInicialE(Tcliente** inicio, int *C, int *M);
+void removerClienteInicioE(Tcliente** inicio, int *C, int *M);
 void removerClienteFinalE(Tcliente** cabeca, int *C, int *M);
 void removerClienteE(Tcliente** cabeca, int *C, int *M);
-void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Retira um cliente de uma lista sequencial.
+void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M);
+void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);
+void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
 void imprimeEspecifico(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
 void buscarCliente(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M);;// Encontra um cliente em especifico através do RG em uma lista sequencial
@@ -106,7 +108,7 @@ int main()
 
                 case 4: t = clock();//Retirar Cliente do Inicio da Lista
                         //retirarCliente(&inicio, 4, &C, &M);
-                        removerClienteInicialE(&inicio, &C, &M);
+                        removerClienteInicioE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -216,7 +218,8 @@ int main()
 
                 case 4: t = clock();
                         tam--;
-                        retirarClienteSequencial(&usuario, 4, tam, &C, &M);
+                        //retirarClienteSequencial(&usuario, 4, tam, &C, &M);
+                        removerClienteInicioS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -224,7 +227,8 @@ int main()
 
                 case 5: t = clock();
                         tam--;
-                        retirarClienteSequencial(&usuario, 5, tam, &C, &M);
+                        //retirarClienteSequencial(&usuario, 5, tam, &C, &M);
+                        removerClienteFinalS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -232,7 +236,8 @@ int main()
 
                 case 6: t = clock();
                         tam--;
-                        retirarClienteSequencial(&usuario, 6, tam, &C, &M);
+                        //retirarClienteSequencial(&usuario, 6, tam, &C, &M);
+                        removerClienteS(&usuario, tam, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -296,6 +301,9 @@ int main()
             system("cls"); //Limpa o buffer de entrada
             C = 0; M = 0;
         }while (op != 12);
+
+        free(usuario);
+
         return 0;
     }
 
@@ -457,7 +465,7 @@ void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M)
     (*usuario)[pos].RG = pessoa->RG;
 }
 
-void removerClienteInicialE(Tcliente** inicio, int *C, int *M)
+void removerClienteInicioE(Tcliente** inicio, int *C, int *M)
 {
     Tcliente *tpm = (*inicio)->proximo;
     free((*inicio));
@@ -499,7 +507,7 @@ void removerClienteE(Tcliente** cabeca, int *C, int *M)
     }while(pos < 0);
 
     if(pos == 0)
-        removerClienteInicialE(cabeca, C, M);
+        removerClienteInicioE(cabeca, C, M);
     else{
         for(int i = 1; i < pos; i++){
             *C = *C + 1;
@@ -511,42 +519,39 @@ void removerClienteE(Tcliente** cabeca, int *C, int *M)
     }
 }
 
-void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M)
+void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M)
 {
-    if(n == 4){
-        *C = 1;
-        *M = 0;
-        for(int i = 0; i < tam; i++){
-            *C = *C + 1;
-            *M = *M + 1;
-            strcpy((*usuario)[i].nome, (*usuario)[i+1].nome);
-            (*usuario)[i].RG = (*usuario)[i+1].RG;
-        }
-        (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
+    for(int i = 0; i < tam; i++){
+        *C = *C + 1;
+        *M = *M + 1;
+        strcpy((*usuario)[i].nome, (*usuario)[i+1].nome);
+        (*usuario)[i].RG = (*usuario)[i+1].RG;
     }
-    else if(n == 5){
-        *C = 2;
-        *M = 0;
-        (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
-    }
-    else{
-        int ps;
+    (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
+}
 
+void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M)
+{
+    (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
+}
+
+void removerClienteS(Tcliente** usuario, int tam, int *C, int *M)
+{
+    int pos;
         do{
             printf("Escolha a posicao que deseja excluir:\n");
-            scanf("%d", &ps);//Baseado no Binario
+            scanf("%d", &pos);//Baseado no Binario
             *C = *C + 1;
-        }while(ps < 0);
+        }while(pos < 0);
 
         for(int i = 0; i < tam; i++){
-            if(i >= ps){
+            if(i >= pos){
                 strcpy((*usuario)[i].nome, (*usuario)[i+1].nome);
                 (*usuario)[i].RG = (*usuario)[i+1].RG;
                 *M = *M + 1;
             }
         }
         (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
-    }
 }
 
 void listarEncadeado (Tcliente *cabeca)
