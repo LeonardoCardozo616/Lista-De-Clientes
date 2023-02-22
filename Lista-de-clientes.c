@@ -526,20 +526,51 @@ void removerClienteInicialE(Tcliente** inicio, int *C, int *M)
 void removerClienteFinalE(Tcliente** cabeca, int *C, int *M)
 {
     Tcliente *ultimoNo, *penultimoNo;
-        *C = 2;
-        ultimoNo = *cabeca;
-        *M = 1;
-        while (ultimoNo->proximo != NULL){
-            *C = *C + 1;
-            penultimoNo = ultimoNo;
-            ultimoNo = ultimoNo->proximo;
-            *M = *M + 2;
-        }
+    *C = 2;
+    ultimoNo = *cabeca;
+    *M = 1;
+    while (ultimoNo->proximo != NULL){
         *C = *C + 1;
+        penultimoNo = ultimoNo;
+        ultimoNo = ultimoNo->proximo;
+        *M = *M + 2;
+    }
+    *C = *C + 1;
 
-        free(ultimoNo);
-        penultimoNo->proximo = NULL;
-        *M = *M + 1;
+    free(ultimoNo);
+    penultimoNo->proximo = NULL;
+    *M = *M + 1;
+}
+
+void removerClienteE(Tcliente** cabeca, int *C, int *M)
+{
+    int pos;
+    Tcliente *posicao1 = *cabeca;
+    Tcliente *posicao2 = (*cabeca)->proximo;
+    *C = 3;
+    *M = 2;
+
+    do{
+        printf("Escolha a posicao que deseja excluir:\n");
+        scanf("%d", &pos);//Baseado no Binario
+        *C = *C + 1;
+    }while(pos < 0);
+
+    if(pos == 0)
+        removerClienteInicialE(cabeca, C, M);
+    else{
+        for(int i = 0; i < pos; i++){
+            *C = *C + 1;
+            if(pos == (i+1)){
+                posicao1->proximo = posicao2->proximo;
+                *M = *M + 1;
+                continue;
+            }
+            *M = *M + 2;
+            posicao1 = posicao1->proximo;
+            posicao2 = posicao2->proximo;
+        }
+    }
 }
 
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M)
