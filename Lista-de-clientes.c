@@ -14,8 +14,8 @@ typedef struct tipo_cliente
 void listaEncadeada(Tcliente **cabeca, Tcliente **inicio ,FILE* fp);//Criação de uma lista Encadeada
 Tcliente* listaSequencial(FILE* fp, int linhas, int* tam);//Criação de uma lista Sequencial
 Tcliente* criaçãoDeNo();//Criação de um nó
-int getRG();
-int getPos(int caso);
+int getRG();//Recebe um valor de RG
+int getPos(int caso);//Recebe um valor de posição
 void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente no início da lista Encadeada
 void inserirClienteFinalE(Tcliente **final, int *C, int *M);//Insere um novo cliente no fim da lista Encadeada
 void inserirClienteE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente em qualquer posição da lista Encadeada
@@ -30,8 +30,9 @@ void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);//Remove 
 void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);//Remove um cliente de qualquer posição da lista Sequencial
 void buscarClienteE(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
 void buscarClienteS(Tcliente *usuario, int tam, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista sequencial
-void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M);
-void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
+void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M);//Encontra um cliente em específico através do RG em uma lista sequencial ordenada
+void imprimirListaE(Tcliente *cabeca);//imprime a lista encadeada
+void imprimirListaS(Tcliente *usuario, int tam);
 void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M);// Ordena uma lista usando diferentes métodos
 void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
 void ordenarListaMergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);// Ordena com MergeSort
@@ -139,7 +140,7 @@ int main()
 
                 case 8: break;//Ordenar a lista
 
-                case 9: listarEncadeado(inicio); break;//Imprimir Lista
+                case 9: imprimirListaE(inicio); break;//Imprimir Lista
 
                 case 10: lerListaArquivo(file, 9, inicio);//Criar um Arquivo
                         break;
@@ -276,11 +277,7 @@ int main()
                         break;
 
                 case 9: system("cls");
-                        for(int i = 0; i < tam; i++)
-                        {
-                            printf("Nome: %s, ", usuario[i].nome);
-                            printf("RG: %d e Posicao: %d\n\n", usuario[i].RG, i);
-                        }
+                        imprimirListaS(usuario, tam);
                         break;
 
                 case 10: lerListaArquivoSequencial(fileS, 9, tam, usuario);
@@ -630,7 +627,7 @@ void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M)
         printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
 }
 
-void listarEncadeado (Tcliente *cabeca)
+void imprimirListaE (Tcliente *cabeca)
 {
     int i = 0;
     while (cabeca != NULL){
@@ -640,6 +637,14 @@ void listarEncadeado (Tcliente *cabeca)
     }
 }
 
+void imprimirListaS(Tcliente *usuario, int tam)
+{
+    for(int i = 0; i < tam; i++)
+    {
+        printf("Nome: %s, ", usuario[i].nome);
+        printf("RG: %d e Posicao: %d\n\n", usuario[i].RG, i);
+    }
+}
 
 void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M)
 {
