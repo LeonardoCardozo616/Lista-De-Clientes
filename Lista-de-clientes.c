@@ -21,7 +21,8 @@ void inserirClienteInicioS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M);
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M);
 void retirarCliente(Tcliente **cabeca, int n, int *C, int *M);//Retira um cliente de uma lista encadeada.
-void retirarClienteInicialE(Tcliente** inicio, int *C, int *M);
+void removerClienteInicialE(Tcliente** inicio, int *C, int *M);
+void removerClienteFinalE(Tcliente** cabeca, int *C, int *M);
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M);//Retira um cliente de uma lista sequencial.
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
 void imprimeEspecifico(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
@@ -105,14 +106,15 @@ int main()
 
                 case 4: t = clock();//Retirar Cliente do Inicio da Lista
                         //retirarCliente(&inicio, 4, &C, &M);
-                        retirarClienteInicialE(&inicio, &C, &M);
+                        removerClienteInicialE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
                         break;
 
                 case 5: t = clock();//Retirar Cliente do Final da Lista
-                        retirarCliente(&inicio, 5, &C, &M);
+                        //retirarCliente(&careca, 5, &C, &M);
+                        removerClienteFinalE(&inicio, &C, &M);
                         t = clock() - t;
                         printf("C(n) = %d\nM(n) = %d\n", C, M);
                         printf("Tempo de execucao: %lfms\n", ((double)t)/((CLOCKS_PER_SEC/1000)));
@@ -151,7 +153,8 @@ int main()
             C = 0; M = 0;
         }while (op != 12);
 
-        noAtual = careca;
+        
+        noAtual = inicio;
         while(noAtual != NULL){
             careca = noAtual->proximo;
             free(noAtual);
@@ -482,7 +485,6 @@ void retirarCliente(Tcliente** cabeca, int n, int *C, int *M)
         free(ultimoNo);
         penultimo->proximo = NULL;
         *M = *M + 1;
-
     }
     else
     {
@@ -513,11 +515,31 @@ void retirarCliente(Tcliente** cabeca, int n, int *C, int *M)
     }
 }
 
-void retirarClienteInicialE(Tcliente** inicio, int *C, int *M)
+void removerClienteInicialE(Tcliente** inicio, int *C, int *M)
 {
     Tcliente *tpm = (*inicio)->proximo;
+    free((*inicio));
     (*inicio) = tpm;
     *M = 2;
+}
+
+void removerClienteFinalE(Tcliente** cabeca, int *C, int *M)
+{
+    Tcliente *ultimoNo, *penultimoNo;
+        *C = 2;
+        ultimoNo = *cabeca;
+        *M = 1;
+        while (ultimoNo->proximo != NULL){
+            *C = *C + 1;
+            penultimoNo = ultimoNo;
+            ultimoNo = ultimoNo->proximo;
+            *M = *M + 2;
+        }
+        *C = *C + 1;
+
+        free(ultimoNo);
+        penultimoNo->proximo = NULL;
+        *M = *M + 1;
 }
 
 void retirarClienteSequencial(Tcliente **usuario, int n, int tam, int *C, int *M)
