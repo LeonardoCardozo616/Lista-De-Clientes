@@ -13,7 +13,9 @@ typedef struct tipo_cliente
 
 void listaEncadeada(Tcliente **cabeca, Tcliente **inicio ,FILE* fp);//Criação de uma lista Encadeada
 Tcliente* listaSequencial(FILE* fp, int linhas, int* tam);//Criação de uma lista Sequencial
-Tcliente* criaçãoDeNo();//Criação de um nó de Tcliente
+Tcliente* criaçãoDeNo();//Criação de um nó
+int getRG();
+int getPos(int caso);
 void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente no início da lista Encadeada
 void inserirClienteFinalE(Tcliente **final, int *C, int *M);//Insere um novo cliente no fim da lista Encadeada
 void inserirClienteE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente em qualquer posição da lista Encadeada
@@ -27,7 +29,8 @@ void removerClienteInicioS(Tcliente** usuario, int tam, int* C, int *M);//Remove
 void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M);//Remove o último cliente da lista Sequencial
 void removerClienteS(Tcliente** usuario, int tam, int *C, int *M);//Remove um cliente de qualquer posição da lista Sequencial
 void buscarClienteE(Tcliente *cabeca, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista enccadeada
-void buscarClienteS(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M);;// Encontra um cliente em especifico através do RG em uma lista sequencial
+void buscarClienteS(Tcliente *usuario, int tam, int *C, int *M);// Encontra um cliente em especifico através do RG em uma lista sequencial
+void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M);
 void listarEncadeado(Tcliente *cabeca);//imprime a lista encadeada
 void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M);// Ordena uma lista usando diferentes métodos
 void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
@@ -238,15 +241,13 @@ int main()
                         break;
 
                 case 7: system("cls");
-                        printf("Digite o RG da pessoa que deseja encontrar: \n");
-                        scanf("%d", &RGS);
                         printf("Escolha a forma de busca: \nI -> Busca Sequecial \nII -> Busca Binaria(apenas apos ordenar a lista)\n");
                         scanf("%d", &op7);
                         t = clock();
                         switch(op7)
                         {
-                            case 1: buscarClienteS(usuario, op7, 0, tam, RGS, &C, &M); break;
-                            case 2: buscarClienteS(usuario, op7, 0, tam-1, RGS ,&C, &M); break;
+                            case 1: buscarClienteS(usuario, tam, &C, &M); break;
+                            case 2: buscarClienteBinario(usuario, tam-1, &C, &M); break;
                             default: printf("\n\n Opcao nao valida\n");
                         }
                         t = clock() - t;
@@ -364,6 +365,33 @@ Tcliente* criaçãoDeNo()
     return novoNo;
 }
 
+int getRG()
+{
+    int RG;
+    
+    printf("Digite o RG da pessoa que deseja encontrar: \n");
+    scanf("%d", &RG);
+
+    return RG;
+}
+
+int getPos(int caso)
+{
+    int pos;
+    do{
+        if(caso == 0){
+            printf("Escolha a posicao que deseja incluir:\n");
+            scanf("%d", &pos);
+        }
+        else{
+            printf("Escolha a posicao que deseja excluir:\n");
+            scanf("%d", &pos);
+        }
+    }while(pos < 0);
+
+    return pos;
+}
+
 void inserirClienteInicioE(Tcliente **inicio, int *C, int *M)
 {
     Tcliente *novoNo = criaçãoDeNo();
@@ -387,13 +415,8 @@ void inserirClienteE(Tcliente **cabeca, int *C, int *M)
     Tcliente *novoNo;
     Tcliente *posA = *cabeca,
     *posB = (*cabeca)->proximo;
-    int pos;
-
-     do{
-        printf("Escolha a posicao que deseja incluir:\n");
-        scanf("%d", &pos);//Baseado no Binario
-        (*C)++;
-    }while(pos < 0);
+    int pos = getPos(0);
+    (*C)++;
 
     if(pos == 0)
         inserirClienteInicioE(cabeca, C, M);
@@ -435,14 +458,8 @@ void inserirClienteFinalS(Tcliente **usuario, int tam, int* C, int *M)
 
 void inserirClienteS(Tcliente **usuario, int tam, int *C, int *M)
 {
-    int pos;
+    int pos = getPos(0);
     Tcliente *pessoa = criaçãoDeNo();
-
-    do{
-        printf("Escolha a posicao que deseja incluir:\n");
-        scanf("%d", &pos);//Baseado no Binario
-        *C = *C + 1;
-    }while(pos < 0 && pos > tam-1);
     
     for(int i = tam-1; i > 0; i--){
         *C = *C + 2;
@@ -488,17 +505,11 @@ void removerClienteFinalE(Tcliente** cabeca, int *C, int *M)
 
 void removerClienteE(Tcliente** cabeca, int *C, int *M)
 {
-    int pos;
+    int pos = getPos(-1);
     Tcliente *posA = *cabeca;
     Tcliente *posB = (*cabeca)->proximo;
     *C = 3;
     *M = 2;
-
-    do{
-        printf("Escolha a posicao que deseja excluir:\n");
-        scanf("%d", &pos);//Baseado no Binario
-        *C = *C + 1;
-    }while(pos < 0);
 
     if(pos == 0)
         removerClienteInicioE(cabeca, C, M);
@@ -531,30 +542,23 @@ void removerClienteFinalS(Tcliente** usuario, int tam, int* C, int* M)
 
 void removerClienteS(Tcliente** usuario, int tam, int *C, int *M)
 {
-    int pos;
-        do{
-            printf("Escolha a posicao que deseja excluir:\n");
-            scanf("%d", &pos);//Baseado no Binario
-            *C = *C + 1;
-        }while(pos < 0);
+    int pos = getPos(-1);
 
-        for(int i = 0; i < tam; i++){
-            if(i >= pos){
-                strcpy((*usuario)[i].nome, (*usuario)[i+1].nome);
-                (*usuario)[i].RG = (*usuario)[i+1].RG;
-                *M = *M + 1;
-            }
+    for(int i = 0; i < tam; i++){
+        if(i >= pos){
+            strcpy((*usuario)[i].nome, (*usuario)[i+1].nome);
+            (*usuario)[i].RG = (*usuario)[i+1].RG;
+            *M = *M + 1;
         }
-        (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
+    }
+    (*usuario) = (Tcliente*) realloc((*usuario), sizeof(Tcliente)*tam);
 }
 
 void buscarClienteE(Tcliente *cabeca, int *C, int *M)
 {
-    int RG, Encontrou = 0;
+    int RG = getRG(), Encontrou = 0;
     int i = 0;
 
-    printf("Digite o RG da pessoa que deseja encontrar: \n");
-    scanf("%d", &RG);
     *C = 0;
     *M = 0;
 
@@ -575,55 +579,55 @@ void buscarClienteE(Tcliente *cabeca, int *C, int *M)
         printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
 }
 
-void buscarClienteS(Tcliente *usuario, int op, int inic, int tam, int RG, int *C, int *M)
+void buscarClienteS(Tcliente *usuario, int tam, int *C, int *M)
 {
-    int Encontrou = 0;
+    int RG = getRG(), Encontrou = 0;
 
-    if(op == 1){
-        *C = 1;
-        for(int i = 0; i < tam; i++){
+    for(int i = 0; i < tam; i++){
+        *C = *C + 2;
+        *M = *M + 1;
+        if(usuario[i].RG == RG){
+            Encontrou = 1;
+            printf("\n\nNome: %s, ", usuario[i].nome);
+            printf("RG: %d e Posicao: %d\n\n", usuario[i].RG, i);
+            break;
+        }
+    }
+    *C = *C + 1;
+    if(Encontrou == 0)
+        printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
+}
+
+void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M)
+{
+    int RG = getRG(), Encontrou = 0, meio, inic = 0;
+    
+    *C = 3;
+    while(inic <= tam){
+        *C = *C + 1;
+        *M = *M + 1;
+        meio = (inic+tam)/2;
+        if(usuario[meio].RG == RG){
+            *C = *C + 1;
+            Encontrou = 1;
+            printf("\n\nNome: %s, ", usuario[meio].nome);
+            printf("RG: %d e Posicao: %d\n\n", usuario[meio].RG, meio);
+            break;
+        }
+        else if(usuario[meio].RG < RG){
             *C = *C + 2;
             *M = *M + 1;
-            if(usuario[i].RG == RG){
-                Encontrou = 1;
-                printf("\n\nNome: %s, ", usuario[i].nome);
-                printf("RG: %d e Posicao: %d\n\n", usuario[i].RG, i);
-                break;
-            }
+            inic = meio+1;
         }
-        *C = *C + 1;
-         if(Encontrou == 0)
-            printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
-    }
-    else{
-        int meio;
-        *C = 3;
-        while(inic <= tam){
-            *C = *C + 1;
+        else{
+            *C = *C + 3;
             *M = *M + 1;
-            meio = (inic+tam)/2;
-            if(usuario[meio].RG == RG){
-                *C = *C + 1;
-                Encontrou = 1;
-                printf("\n\nNome: %s, ", usuario[meio].nome);
-                printf("RG: %d e Posicao: %d\n\n", usuario[meio].RG, meio);
-                break;
-            }
-            else if(usuario[meio].RG < RG){
-                *C = *C + 2;
-                *M = *M + 1;
-                inic = meio+1;
-            }
-            else{
-                *C = *C + 3;
-                *M = *M + 1;
-                tam = meio-1;
-            }
+            tam = meio-1;
         }
-        *C = *C + 1;
-        if(Encontrou == 0)
-            printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
     }
+    *C = *C + 1;
+    if(Encontrou == 0)
+        printf("Sinto muito, %d nao foi encontrado.\n\n", RG);
 }
 
 void listarEncadeado (Tcliente *cabeca)
