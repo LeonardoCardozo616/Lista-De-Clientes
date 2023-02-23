@@ -44,27 +44,29 @@ void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M);//Encontra
 
 /*Imprimir lista*/
 void imprimirListaE(Tcliente *cabeca);//imprime a lista encadeada
-void imprimirListaS(Tcliente *usuario, int tam);
+void imprimirListaS(Tcliente *usuario, int tam);//imprime a lista sequencial
 
 /*Ordenações*/
-void selectionSort(Tcliente **usuario, int tam, int *C, int *M);
-void insertSort(Tcliente **usuario, int tam, int *C, int *M);
-void bubbleSort(Tcliente **usuario, int tam, int *C, int *M);
-void shellSort(Tcliente **usuario, int tam, int *C, int *M);
+void selectionSort(Tcliente **usuario, int tam, int *C, int *M);//Oredena com SelectionSort 
+void insertSort(Tcliente **usuario, int tam, int *C, int *M);//Ordena com InsertSort
+void bubbleSort(Tcliente **usuario, int tam, int *C, int *M);//Ordena com BubbleSort
+void shellSort(Tcliente **usuario, int tam, int *C, int *M);//Ordena com ShellSort
 void quickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
 void mergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);// Ordena com MergeSort
 void merge(Tcliente *usuario, int inicio, int meio, int fim, int *C, int *M);// Ordena com Merge
 
 /*Manipulação de arquivos*/
-void lerListaArquivoE(FILE *fp, int n, Tcliente *cabeca);// Lê a lista em arquivo encadeado
-void lerListaArquivoS(FILE *fp, int n, int tam, Tcliente *usuario);// Lê a lista em arquivo sequencial
+void escreverListaArquivoE(FILE *fp, Tcliente* cabeca);//Escreve um arquivo da lista encadeada criada
+void lerListaArquivoE(FILE *fp, Tcliente *cabeca);//Lê um arquivo de uma lista encadeada
+void escreverListaArquivoS(FILE *fp, int tam, Tcliente *usuario);//Escreve um arquivo da lista sequencial criada 
+void lerListaArquivoS(FILE *fp, int tam,Tcliente *usuario);//Lê um arquivo de uma lista sequencial
 
 int main()
 {
     FILE *fp;//Abrir arquivo
     clock_t t;//Marca o tempo em milissegundos
     char arq[30];//Armazena Nome e RG
-    char pasta[50] = "PastaDeLista/NomeRG/";
+    char pasta[TAM] = "PastaDeLista/NomeRG/";
     char lista;//Define lista Sequencial ou Encadeada
     int op;//Op��es de Menu
     int C = 0, M = 0;
@@ -161,11 +163,9 @@ int main()
 
                 case 9: imprimirListaE(inicio); break;//Imprimir Lista
 
-                case 10: lerListaArquivoE(file, 9, inicio);//Criar um Arquivo
-                        break;
+                case 10: escreverListaArquivoE(file, inicio); break;
 
-                case 11: lerListaArquivoE(file, 10, inicio);//Imprimir Arquivo
-                         break;
+                case 11: lerListaArquivoE(file, inicio); break;//Imprimir arquivo
 
                 case 12: continue;//Sair
 
@@ -299,10 +299,9 @@ int main()
                         imprimirListaS(usuario, tam);
                         break;
 
-                case 10: lerListaArquivoS(fileS, 9, tam, usuario);
-                        break;
+                case 10: escreverListaArquivoS(fileS, tam, usuario); break;
 
-                case 11:lerListaArquivoS(fileS, 10, tam, usuario);
+                case 11:lerListaArquivoS(fileS, tam, usuario);
                         break;
 
                 case 12: continue;
@@ -880,70 +879,37 @@ void merge(Tcliente *usuario, int inicio, int meio, int fim, int *C, int *M)
     free(R);
 }
 
-void lerListaArquivoE(FILE *fp, int n, Tcliente *cabeca)
+void escreverListaArquivoE(FILE *fp, Tcliente* cabeca)
 {
-    char arq1[TAM], arq2[TAM];
+    char arq[TAM];
+    char pasta[TAM] = "PastaDeLista/NomeRG/";
 
-    if(n == 9){
-        printf("Informe o nome do arquivo a ser Escrito: \n");
-        scanf("%s", arq1);
-        fp = fopen(arq1, "w");
-        while(cabeca->proximo != NULL){
-            fprintf(fp, "%s,%d\n", cabeca->nome, cabeca->RG);
-            cabeca = cabeca->proximo;
-        }
+    printf("Informe o nome do arquivo a ser Escrito: \n");
+    scanf("%s", arq);
+    
+    strcat(pasta, arq);
+    fp = fopen(pasta, "w");
+    while(cabeca->proximo != NULL){
         fprintf(fp, "%s,%d\n", cabeca->nome, cabeca->RG);
-        fclose(fp);
-
+        cabeca = cabeca->proximo;
     }
-    else{
-        char c;
-        printf("Informe o nome do arquivo a ser lido: \n");
-        scanf("%s", arq2);
-
-        fp = fopen(arq2, "r");
-
-        if(NULL == fp)
-        {
-            printf("O arquivo nao pode ser aberto =(.\n");
-            system("Pause");
-            exit(1);
-        }
-        printf("\nImprimindo...\n");
-        c = fgetc(fp);
-        while (!feof(fp)) {
-            putchar(c);
-            c = fgetc(fp);
-        }
-
-        fclose(fp);
-    }
+    fprintf(fp, "%s,%d\n", cabeca->nome, cabeca->RG);
+    fclose(fp);
 }
 
-void lerListaArquivoS(FILE *fp, int n,int tam,Tcliente *usuario)
+void lerListaArquivoE(FILE *fp, Tcliente *cabeca)
 {
-    char arq1[TAM], arq2[TAM];
+    char arq[TAM];
+    char pasta[TAM] = "PastaDeLista/NomeRG/";
 
-    if(n == 9)
-    {
-        printf("Informe o nome do arquivo a ser Escrito: \n");
-        scanf("%s", arq1);
-        fp = fopen(arq1, "w");
-
-        for(int i = 0; i < tam; i++){
-            fprintf(fp, "%s,%d\n", usuario[i].nome, usuario[i].RG);
-        }
-        fclose(fp);
-    }
-    else{
         char c;
         printf("Informe o nome do arquivo a ser lido: \n");
-        scanf("%s", arq2);
+        scanf("%s", arq);
 
-        fp = fopen(arq2, "r");
+        strcat(pasta, arq);
+        fp = fopen(pasta, "r");
 
-        if(NULL == fp)
-        {
+        if(NULL == fp) {
             printf("O arquivo nao pode ser aberto =(.\n");
             system("Pause");
             exit(1);
@@ -954,5 +920,47 @@ void lerListaArquivoS(FILE *fp, int n,int tam,Tcliente *usuario)
             putchar(c);
             c = fgetc(fp);
         }
+
+        fclose(fp);
+}
+
+void escreverListaArquivoS(FILE *fp, int tam, Tcliente *usuario)
+{
+    char arq[TAM];
+    char pasta[TAM] = "PastaDeLista/NomeRG/";
+
+    printf("Informe o nome do arquivo a ser Escrito: \n");
+    scanf("%s", arq);
+    strcat(pasta, arq);
+    fp = fopen(pasta, "w");
+
+    for(int i = 0; i < tam; i++){
+        fprintf(fp, "%s,%d\n", usuario[i].nome, usuario[i].RG);
+    }
+    fclose(fp);
+}
+
+void lerListaArquivoS(FILE *fp, int tam,Tcliente *usuario)
+{
+    char arq[TAM];
+    char pasta[TAM] = "PastaDeLista/NomeRG/";
+
+    char c;
+    printf("Informe o nome do arquivo a ser lido: \n");
+    scanf("%s", arq);
+
+    strcat(pasta, arq);
+    fp = fopen(pasta, "r");
+
+    if(NULL == fp) {
+        printf("O arquivo nao pode ser aberto =(.\n");
+        system("Pause");
+        exit(1);
+    }
+    printf("\nImprimindo...\n");
+    c = fgetc(fp);
+    while (!feof(fp)) {
+        putchar(c);
+        c = fgetc(fp);
     }
 }
