@@ -1,8 +1,9 @@
 # Lista de Clientes
 ***
- Trata-se de um programa em linguagem C, que é capaz de listar uma quantidade de clientes e seus respectivos RGs.
+ Esse é um programa em linguagem C, que é capaz de aramzenar uma lista de clientes e modificá-la como desejar, utilizando conhecimentos de Estrutura de Dados.
  
- As listas de clientes estão contidas na pasta `PastaDeLista\\NomeRG`, cada lista contém um nome seguido de um RG.
+ As listas de clientes estão contidas na pasta `PastaDeLista\NomeRG` e cada lista contém um nome seguido de um RG.
+ 
  Exemplo: **NomeRG10.txt**
 ```
 Paulo,82475249
@@ -75,7 +76,7 @@ Tcliente* listaSequencial(FILE* fp, int linhas, int* tam)
 }
 ```
 ## Menu Principal
-No Menu é possível editar a lista, incluindo novos clientes ou excluindo-os, também existe busca por um cliente da lista através de seu RG, ordenar a lista em ordem crescente (__Disponível apenas na lista Sequencial__), impressão da lista completa e criação de um arquivo da lista modificada pelo usuário, além de ser possível acessar qualquer arquivo dentro da pasta `PastaDeLista\\NomeRG` e imprimir no próprio terminal.
+No Menu é possível editar a lista, incluindo novos clientes ou excluindo-os, também existe busca por um cliente da lista através de seu RG, ordenar a lista em ordem crescente (__Disponível apenas na lista Sequencial__), impressão da lista completa e criação de um arquivo da lista modificada pelo usuário, além de ser possível acessar qualquer arquivo dentro da pasta `PastaDeLista\NomeRG` e imprimir no próprio terminal.
 ```
 /*Inserção de clientes*/
 void inserirClienteInicioE(Tcliente **cabeca, int *C, int *M);//Insere um novo cliente no início da lista Encadeada
@@ -117,3 +118,29 @@ void lerListaArquivoE(FILE *fp, Tcliente *cabeca);//Lê um arquivo de uma lista 
 void escreverListaArquivoS(FILE *fp, int tam, Tcliente *usuario);//Escreve um arquivo da lista sequencial criada 
 void lerListaArquivoS(FILE *fp, int tam,Tcliente *usuario);//Lê um arquivo de uma lista sequencial
 ```
+### Inserção e Remoção de clientes :pushpin: :scissors:
+Foram criados 3 opções de inserção e 3 opções de remoção:
+ 1. __inserir novo cliente no inicio da lista;__
+ 0. __inserir um novo cliente no final da lista;__
+ 0. __inserir novo cliente em alguma posicao especifica;__
+ 0. __retirar o primeiro cliente da lista;__
+ 0. __retirar o ultimo cliente da lista;__
+ 0. __retirar um cliente especifico.__
+ 
+Cada uma dessas opções são feitas em funções diferentes. A __primeira__ e a __quarta__ opção insere/remove um cliente na primeira posição, a __segunda__ e a __quinta__ opção insere/remove um cliente no final da lista e a __terceira__ e __sexta__ opção insere/remove um cliente em qualquer posição que o usuário desejar, incluindo a primeira e última posiução.
+### Busca de cliente :mag:
+Pelo fato de poder existir mais de uma pessoa com o mesmo nome, existe uma grande possibilidade de haver conflitos ao procurar um cliente, por isso, a busca é feita através de seu RG, pois cada um tem seu próprio RG.
+
+Existem duas formas de busca na **lista sequencial**, a primeira que busca observando todos os clientes do primeiro ao último e a [Busca Binária](https://www.youtube.com/watch?v=iP897Z5Nerk&t=39s) que funciona apenas caso a lista esteja ordenada.
+### Ordenação :card_file_box:
+Eis aqui as 6 ordenações, disponíveis apenas na lista sequencial, com um link explicando o funcionamento de cada uma:
+ 1. [Selection-sort;](https://www.youtube.com/watch?v=Ns4TPTC8whw&t=5s)
+ 2. [Insert-sort;](https://www.youtube.com/watch?v=ROalU379l3U)
+ 3. [Bubble-sort;](https://www.youtube.com/watch?v=lyZQPjUT5B4)
+ 4. [Shell-sort;](https://www.youtube.com/watch?v=CmPA7zE8mx0&t=12s)
+ 5. [Quick-sort;](https://www.youtube.com/watch?v=lyZQPjUT5B4)
+ 6. [Merge-sort.](https://www.youtube.com/watch?v=XaqR3G_NVoo)
+ ### Impressão :printer:
+ Será impresso a lista, com o nome, RG e Posição, sempre atualizada com as modificações feitas pelo usuário.
+ ### Manipulação de arquivos :file_folder:
+ Por fim, é possível salvar a lista modificada em um arquivo, que será salva dentro da pasta `PastaDeLista\NomeRG`, e também existe a opção de imprimir no terminal qualquer arquivo que esteja dentro dessa pasta. 
