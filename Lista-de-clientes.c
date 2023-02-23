@@ -677,7 +677,6 @@ void imprimirListaS(Tcliente *usuario, int tam)
 void selectionSort(Tcliente **usuario, int tam, int *C, int *M)
 {
     Tcliente elem;
-    printf("tam = %d\n", tam);
 
     for(int i = 0; i < tam; i++){
         elem = (*usuario)[i];
