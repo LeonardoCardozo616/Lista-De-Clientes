@@ -34,9 +34,12 @@ void buscarClienteS(Tcliente *usuario, int tam, int *C, int *M);// Encontra um c
 void buscarClienteBinario(Tcliente *usuario, int tam, int *C, int *M);//Encontra um cliente em específico através do RG em uma lista sequencial ordenada
 void imprimirListaE(Tcliente *cabeca);//imprime a lista encadeada
 void imprimirListaS(Tcliente *usuario, int tam);
-void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M);// Ordena uma lista usando diferentes métodos
-void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
-void ordenarListaMergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);// Ordena com MergeSort
+void selectionSort(Tcliente **usuario, int tam, int *C, int *M);
+void insertSort(Tcliente **usuario, int tam, int *C, int *M);
+void bubbleSort(Tcliente **usuario, int tam, int *C, int *M);
+void shellSort(Tcliente **usuario, int tam, int *C, int *M);
+void quickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);//Ordena com QuickSort
+void mergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M);// Ordena com MergeSort
 void merge(Tcliente *usuario, int inicio, int meio, int fim, int *C, int *M);// Ordena com Merge
 void lerListaArquivo(FILE *fp, int n, Tcliente *cabeca);// Lê a lista em arquivo encadeado
 void lerListaArquivoSequencial(FILE *fp, int n, int tam, Tcliente *usuario);// Lê a lista em arquivo sequencial
@@ -86,7 +89,7 @@ int main()
         do{
             printf("\n\nOpcoes: \n1 -> inserir novo cliente no inicio da lista;\n2 -> inserir um novo cliente no final da lista;");
             printf("\n3 -> inserir novo cliente em alguma posicao especifica;\n4 -> retirar o primeiro cliente da lista;\n5 -> retirar o ultimo cliente da lista;");
-            printf("\n6 -> retirar um cliente especifico;\n7 -> procurar alguem baseado em seu RG;\n8 -> ordenar a lista;\n9 -> imprimir a lista;\n10 -> salvar lista em um arquivo;");
+            printf("\n6 -> retirar um cliente especifico;\n7 -> procurar alguem baseado em seu RG;\n8 -> ordenar a lista; (inoperante)\n9 -> imprimir a lista;\n10 -> salvar lista em um arquivo;");
             printf("\n11 -> ler lista de um arquivo;\n12 -> sair do sistema.\n");
             scanf("%d", &op);
             switch(op){
@@ -264,12 +267,12 @@ int main()
                         t = clock();
                         switch(op8)
                         {
-                            case 1: ordenarLista(&usuario, 1, tam, &C, &M); break;
-                            case 2: ordenarLista(&usuario, 2, tam, &C, &M); break;
-                            case 3: ordenarLista(&usuario, 3, tam, &C, &M); break;
-                            case 4: ordenarLista(&usuario, 4, tam, &C, &M); break;
-                            case 5: ordenarListaQuickSort(&usuario, 0, tam-1, &C, &M); break;
-                            case 6: ordenarListaMergeSort(&usuario, 0, tam-1, &C, &M); break;
+                            case 1: selectionSort(&usuario, tam, &C, &M); break;
+                            case 2: insertSort(&usuario, tam, &C, &M); break;
+                            case 3: bubbleSort(&usuario, tam, &C, &M); break;
+                            case 4: shellSort(&usuario, tam, &C, &M); break;
+                            case 5: quickSort(&usuario, 0, tam-1, &C, &M); break;
+                            case 6: mergeSort(&usuario, 0, tam-1, &C, &M); break;
                             default: printf("\n\n Opcao nao valida\n");
                         }
                         t = clock() - t;
@@ -657,58 +660,52 @@ void imprimirListaS(Tcliente *usuario, int tam)
     }
 }
 
-void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M)
+void selectionSort(Tcliente **usuario, int tam, int *C, int *M)
 {
-    if(n == 1)
-    {
-        *C = 1;
-        *M = 0;
-        int i, j;
-        Tcliente menor;
+    Tcliente elem;
+    printf("tam = %d\n", tam);
 
-        for(i = 0; i < tam; i++){
-            menor = (*usuario)[i];
-            *C = *C + 2;
-            *M = *M + 1;
-            for(j = i+1; j < tam; j++){
-                *C = *C + 1;
-                if(menor.RG > (*usuario)[j].RG){
-                    menor = (*usuario)[j];
-                    (*usuario)[j] = (*usuario)[i];
-                    (*usuario)[i] = menor;
-                    *M = *M + 3;
-                }
+    for(int i = 0; i < tam; i++){
+        elem = (*usuario)[i];
+        *C = *C + 2;
+        *M = *M + 1;
+        for(int j = i+1; j < tam; j++){
+            *C = *C + 1;
+            if(elem.RG > (*usuario)[j].RG){
+                elem = (*usuario)[j];
+                (*usuario)[j] = (*usuario)[i];
+                (*usuario)[i] = elem;
+                *M = *M + 3;
             }
         }
     }
-    else if(n == 2){
-        *C = 2;
-        *M = 0;
-        int i, j;
-        Tcliente elem;
+}
 
-        for(i = 1; i < tam; i++){
-            *C = *C + 2;
-            *M = *M + 1;
-            j = i-1;
-            elem = (*usuario)[i];
-            while(elem.RG < (*usuario)[j].RG){
-                (*usuario)[j+1] = (*usuario)[j];
-                (*usuario)[j] = elem;
-                j--;
-                *M = *M + 2;
-            }
+void insertSort(Tcliente **usuario, int tam, int *C, int *M)
+{
+    Tcliente elem;
+
+    for(int i = 1; i < tam; i++){
+        *C = *C + 2;
+        *M = *M + 1;
+        int j = i-1;
+        elem = (*usuario)[i];
+        while(elem.RG < (*usuario)[j].RG){
+            (*usuario)[j+1] = (*usuario)[j];
+            (*usuario)[j] = elem;
+            j--;
+            *M = *M + 2;
         }
     }
-    else if(n == 3){
-        *C = 3;
-        *M = 0;
-        int i, j;
-        Tcliente elem;
+}
 
-        for(i = 0; i < tam; i++){
+void bubbleSort(Tcliente **usuario, int tam, int *C, int *M)
+{
+    Tcliente elem;
+
+        for(int i = 0; i < tam; i++){
             *C = *C + 2;
-            for(j = 0; j < tam - i - 1; j++){
+            for(int j = 0; j < tam - i - 1; j++){
                 if((*usuario)[j].RG > (*usuario)[j + 1].RG){
                     elem = (*usuario)[j];
                     (*usuario)[j] = (*usuario)[j+1];
@@ -718,40 +715,38 @@ void ordenarLista(Tcliente **usuario, int n, int tam, int *C, int *M)
             }
         }
         *C = *C + 1;
-    }
-    else{
-        *C = 4;
-        *M = 0;
-        int i, j, h = 1;
-        Tcliente elem;
-
-        while(h < tam){
-            h = 3*h+1;
-            *C = *C + 1;
-        }
-        *C = *C + 1;
-
-        //h = tam/10;
-        do{
-            h = h/3;
-            for(i = h; i < tam; i++){
-                elem = (*usuario)[i];
-                j = i - h;
-                *C = *C + 1;
-                *M = *M + 1;
-                while(j >= 0 && elem.RG < (*usuario)[j].RG){
-                   (*usuario)[j+h] = (*usuario)[j];
-                   j = j - h;
-                   (*usuario)[j+h] = elem;
-                   *M = *M + 2;
-                }
-            }
-            *C = *C + 2;
-        }while(h > 1);
-    }
 }
 
-void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M)
+void shellSort(Tcliente **usuario, int tam, int *C, int *M)
+{
+    int h = 1;
+    Tcliente elem;
+
+    while(h < tam){
+        h = 3*h+1;
+        *C = *C + 1;
+    }
+    *C = *C + 1;
+
+    do{
+        h = h/3;
+        for(int i = h; i < tam; i++){
+            elem = (*usuario)[i];
+            int j = i - h;
+            *C = *C + 1;
+            *M = *M + 1;
+            while((j >= 0) && (elem.RG < (*usuario)[j].RG)){
+               (*usuario)[j+h] = (*usuario)[j];
+               j = j - h;
+               (*usuario)[j+h] = elem;
+               *M = *M + 2;
+            }
+        }
+        *C = *C + 2;
+    }while(h > 1);
+}
+
+void quickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M)
 {
     int i, j, pivo, elemAux;
     char nomeAux[TAM];
@@ -792,21 +787,21 @@ void ordenarListaQuickSort(Tcliente **usuario, int inicio, int fim, int *C, int 
 
     *C = *C + 2;
     if(j > inicio){
-        ordenarListaQuickSort(&(*usuario), inicio, j, C, M);
+        quickSort(&(*usuario), inicio, j, C, M);
     }
     if(i < fim){
-        ordenarListaQuickSort(&(*usuario), i, fim, C, M);
+        quickSort(&(*usuario), i, fim, C, M);
     }
 }
 
-void ordenarListaMergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M)
+void mergeSort(Tcliente **usuario, int inicio, int fim, int *C, int *M)
 {
     int metade;
     if(inicio < fim){
         *C = *C + 1;
         metade = inicio + (fim - inicio)/2;
-        ordenarListaMergeSort(&(*usuario), inicio, metade, C, M);
-        ordenarListaMergeSort(&(*usuario), (metade + 1), fim, C, M);
+        mergeSort(&(*usuario), inicio, metade, C, M);
+        mergeSort(&(*usuario), (metade + 1), fim, C, M);
         merge((*usuario), inicio, metade, fim, C, M);
     }
 }
