@@ -748,13 +748,10 @@ void shellSort(Tcliente **usuario, int tam, int *C, int *M)
 
 void quickSort(Tcliente **usuario, int inicio, int fim, int *C, int *M)
 {
-    int i, j, pivo, elemAux;
+    int elemAux;
     char nomeAux[TAM];
-
-    pivo = (*usuario)[(inicio + fim)/2].RG;
-    //pivo = ((*usuario)[left].RG + (*usuario)[right].RG + (*usuario)[(left + right)/2].RG)/3;
-    i = inicio;
-    j = fim;
+    int pivo = (*usuario)[(inicio + fim)/2].RG;
+    int i = inicio, j = fim;
 
     do{
         *C = *C + 1;
